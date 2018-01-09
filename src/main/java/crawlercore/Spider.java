@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class Spider {
     public static String sendGet (String url) {
         BufferedReader reader = null;
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         try {
             URL realUrl = new URL(url);
@@ -32,7 +32,7 @@ public class Spider {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
 
         } catch (MalformedURLException e) {
@@ -40,7 +40,7 @@ public class Spider {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+        return result.toString();
     }
 
     //知乎爬虫

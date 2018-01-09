@@ -1,7 +1,7 @@
 package utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.mrlrf.model.BaiduTranslateResult;
+import model.BaiduTranslateResult;
 import org.junit.Test;
 
 import java.util.HashMap;
