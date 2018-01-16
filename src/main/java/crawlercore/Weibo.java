@@ -10,19 +10,13 @@ import org.apache.http.config.RegistryBuilder;
 import org.apache.http.cookie.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.cookie.BestMatchSpecFactory;
-import org.apache.http.impl.cookie.BrowserCompatSpec;
-import org.apache.http.impl.cookie.BrowserCompatSpecFactory;
+import org.apache.http.impl.cookie.*;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,12 +98,13 @@ public class Weibo {
 
     public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException {
 
-        String s = Spider.sendGet("http://s.weibo.com/weibo/%25E8%258B%25B9%25E6%259E%259C%25E6%2589%258B%25E6%259C%25BA?topnav=1&wvr=6&b=1");
-        s = unicodeToCh(s);
+        //String s = Spider.sendGet("http://music.163.com/#/discover/artist/cat?id=1001&initial=90");
+        String s2 = Spider.sendGet("http://music.163.com/discover/artist/cat?id=1001&initial=90");
+        System.out.println(s2);
+        s2 = unicodeToCh(s2);
 
-        Document doc = Jsoup.parse(s);
-        Elements searchKey = doc.select("em");
-        System.out.println(searchKey);
+        Document doc = Jsoup.parse(s2);
+        System.out.println(doc);
 
         //System.out.println(s);
         //String savePath = "d:/weibo/html.txt"; //输出到txt文件的存放路径
