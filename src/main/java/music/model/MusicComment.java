@@ -1,9 +1,15 @@
 package music.model;
 
-/*评论POJO*/
-
+/**
+ * 评论实体
+ * @author lirf
+ * @date 2018/1/16 15:40
+ */
 public class MusicComment {
-	//评论类型
+
+	/**
+	 * 评论类型
+	 */
 	private String type;
 	
 	private String nickname;

@@ -2,8 +2,6 @@ package music.model;
 
 import org.bson.Document;
 
-import java.util.List;
-
 /**
  * 歌手实体类
  * @author lirf
@@ -13,7 +11,6 @@ public class Singer implements MogoDBModel{
 
     private String singerId;
     private String singerName;
-    private List<Album> albums;
 
     public String getSingerId() {
         return singerId;
@@ -29,14 +26,6 @@ public class Singer implements MogoDBModel{
 
     public void setSingerName(String singerName) {
         this.singerName = singerName;
-    }
-
-    public List<Album> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
     }
 
     @Override

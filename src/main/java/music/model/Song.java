@@ -2,6 +2,9 @@ package music.model;
 
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 歌曲实体类
  * @author lirf
@@ -11,9 +14,36 @@ public class Song implements MogoDBModel{
 
     private String songId;
     private String songName;
-    private int commentNum;
+    private int commentCount;
     private String albumId;
+    private String albumName;
     private String singerId;
+    private String singerName;
+    private List<MusicComment> comments = new ArrayList<MusicComment>();
+
+    public Song() {
+
+    }
+
+    public Song(String songId, String songName, String albumId, String albumName, String singerId, String singerName) {
+        this.songId = songId;
+        this.songName = songName;
+        this.albumId = albumId;
+        this.albumName = albumName;
+        this.singerId = singerId;
+        this.singerName = singerName;
+    }
+
+    public Song(String songId, String songName, int commentCount, String albumId, String albumName, String singerId, String singerName, List<MusicComment> comments) {
+        this.songId = songId;
+        this.songName = songName;
+        this.commentCount = commentCount;
+        this.albumId = albumId;
+        this.albumName = albumName;
+        this.singerId = singerId;
+        this.singerName = singerName;
+        this.comments = comments;
+    }
 
     public String getSongId() {
         return songId;
@@ -31,12 +61,20 @@ public class Song implements MogoDBModel{
         this.songName = songName;
     }
 
-    public int getCommentNum() {
-        return commentNum;
+    public int getCommentCount() {
+        return commentCount;
     }
 
-    public void setCommentNum(int commentNum) {
-        this.commentNum = commentNum;
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public List<MusicComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<MusicComment> comments) {
+        this.comments = comments;
     }
 
     public String getAlbumId() {
@@ -60,10 +98,24 @@ public class Song implements MogoDBModel{
         Document document = new Document();
         document.append("song_id", songId);
         document.append("song_name", songName);
-        document.append("comment_num", commentNum);
+        document.append("comment_count", commentCount);
         document.append("singer_id", singerId);
         document.append("album_id", albumId);
 
         return document;
+    }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "songId='" + songId + '\'' +
+                ", songName='" + songName + '\'' +
+                ", commentCount=" + commentCount +
+                ", albumId='" + albumId + '\'' +
+                ", albumName='" + albumName + '\'' +
+                ", singerId='" + singerId + '\'' +
+                ", singerName='" + singerName + '\'' +
+                ", comments=" + comments +
+                '}';
     }
 }
