@@ -13,8 +13,6 @@ public class Album implements MogoDBModel{
 
     private String albumId;
     private String albumName;
-    private String issueDate;
-    private String issueCompany;
     private List<Song> songs;
     private String singerId;
 
@@ -32,22 +30,6 @@ public class Album implements MogoDBModel{
 
     public void setAlbumName(String albumName) {
         this.albumName = albumName;
-    }
-
-    public String getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(String issueDate) {
-        this.issueDate = issueDate;
-    }
-
-    public String getIssueCompany() {
-        return issueCompany;
-    }
-
-    public void setIssueCompany(String issueCompany) {
-        this.issueCompany = issueCompany;
     }
 
     public List<Song> getSongs() {
@@ -71,8 +53,6 @@ public class Album implements MogoDBModel{
         Document document = new Document();
         document.append("album_id", albumId);
         document.append("album_name", albumName);
-        document.append("issue_date", issueDate);
-        document.append("issue_company", issueCompany);
         document.append("singer_id", singerId);
 
         return document;
