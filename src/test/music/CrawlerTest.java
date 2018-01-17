@@ -51,15 +51,17 @@ public class CrawlerTest {
     public void parseAlbumsTest() throws IOException {
         String url = "https://music.163.com/artist/album?id=1876";
         MusicCrawlerService crawlerService = new MusicCrawlerService();
-        crawlerService.parseAlbums("1876");
+        //crawlerService.parseAlbums("1876");
     }
 
     @Test
     public void parseSongsTest() throws IOException {
         String url = "https://music.163.com/album?id=36304576";
-        System.out.println(HttpClientUtil.getHTML(url));
-        MusicCrawlerService musicCrawler = new MusicCrawlerService();
-        musicCrawler.parseSongs(url);
+        //String url = "https://www.baidu.com";
+        ProxyIP ip = new ProxyIP("93.167.224.220", 80);
+        //System.out.println(HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort()));
+        //System.out.println(HttpClientUtil.getHTML(url));
+        MusicCrawlerService.parseSongs(url, ip);
     }
 
     // 可以得到歌曲的详细信息
@@ -73,7 +75,7 @@ public class CrawlerTest {
     @Test
     public void commentTest() throws Exception {
         String songId = "509098886";
-        ProxyIP ip = new ProxyIP("27.211.126.232", 8118);
+        ProxyIP ip = new ProxyIP("115.29.236.46", 3128);
         Song song = MusicCrawlerService.parseSongWithComment(songId, ip);
         System.out.println(song);
     }

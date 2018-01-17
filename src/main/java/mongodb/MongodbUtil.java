@@ -154,7 +154,7 @@ public class MongodbUtil {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 
         Block<Document> toListBlock = document -> result.add(document2Map(document));
-        collection.find(and(eq(fieldName, value), gt("age", 20))).forEach(toListBlock);
+        collection.find(eq(fieldName, value)).forEach(toListBlock);
         mongoClient.close();
         return result;
     }

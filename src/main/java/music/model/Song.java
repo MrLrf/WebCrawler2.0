@@ -10,7 +10,7 @@ import java.util.List;
  * @author lirf
  * @date 2018/1/16 15:33
  */
-public class Song implements MogoDBModel{
+public class Song implements MogoDBModel, Comparable{
 
     private String songId;
     private String songName;
@@ -100,7 +100,9 @@ public class Song implements MogoDBModel{
         document.append("song_name", songName);
         document.append("comment_count", commentCount);
         document.append("singer_id", singerId);
+        document.append("singer_name", singerName);
         document.append("album_id", albumId);
+        document.append("album_name", albumName);
 
         return document;
     }
@@ -117,5 +119,17 @@ public class Song implements MogoDBModel{
                 ", singerName='" + singerName + '\'' +
                 ", comments=" + comments +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Song song = (Song) o;
+        if (commentCount < song.commentCount) {
+            return -1;
+        } else if (commentCount > song.commentCount) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

@@ -72,9 +72,11 @@ public class MusicCrawlerService {
      * @param url
      * @throws IOException
      */
-    public static void parseAlbums(String url) throws IOException {
+    public static void parseAlbums(String url, ProxyIP ip) throws IOException {
         //String url = MusicCrawler.DOMAIN + "/artist/album?id=" + id;
-        Document doc = Jsoup.connect(url).get();
+        String result = HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort());
+        //Document doc = Jsoup.connect(url).get();
+        Document doc = Jsoup.parse(result);
 
         Elements elements = doc.select("#m-song-module li");
         int index = 0;
@@ -91,7 +93,7 @@ public class MusicCrawlerService {
         }
         String nextUrl = eles.first().attr("href");
         if (!"javascript:void(0)".equals(nextUrl)) {
-            parseAlbums("https://music.163.com" + nextUrl);
+            parseAlbums("https://music.163.com" + nextUrl, ip);
         }
     }
 
@@ -101,9 +103,11 @@ public class MusicCrawlerService {
      * @return
      * @throws IOException
      */
-    public static Album parseSongs(String albumId) throws IOException {
+    public static Album parseSongs(String albumId, ProxyIP ip) throws IOException {
         String url = MusicCrawlerService.DOMAIN + "/album?id=" + albumId;
+        //String result = HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort());
         Document doc = Jsoup.connect(url).get();
+        //Document doc = Jsoup.parse(result);
 
         Album album = new Album();
         String singerId = doc.select("a.s-fc7").first().attr("href").split("=")[1];
@@ -145,8 +149,8 @@ public class MusicCrawlerService {
     public static Song parseSongInfo(String songId, ProxyIP ip) {
         String url = "http://music.163.com/api/song/detail/?id=" + songId+ "&ids=%5B" + songId + "%5D";
 
-        //JSONObject json = JSON.parseObject(HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort()));
-        JSONObject json = JSON.parseObject(HttpClientUtil.getHTML(url));
+        JSONObject json = JSON.parseObject(HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort()));
+        //JSONObject json = JSON.parseObject(HttpClientUtil.getHTML(url));
 
         String songName = JSONPath.eval(json, "$.songs[0].name").toString();
         String albumId = JSONPath.eval(json, "$.songs[0].album.id").toString();
@@ -181,7 +185,7 @@ public class MusicCrawlerService {
                 .header("Accept", "*/*").header("Cache-Control", "no-cache").header("Connection", "keep-alive")
                 .header("Host", "music.163.com").header("Accept-Language", "zh-CN,en-US;q=0.7,en;q=0.3").header("DNT", "1")
                 .header("Pragma", "no-cache").header("Content-Type", "application/x-www-form-urlencoded")
-                .data(JSSecret.getDatas(reqStr)).method(Connection.Method.POST).ignoreContentType(true).timeout(10000).execute();
+                .data(JSSecret.getDatas(reqStr)).method(Connection.Method.POST).ignoreContentType(true).timeout(50000).execute();
 
         Object res = JSON.parse(response.body());
 
@@ -189,8 +193,8 @@ public class MusicCrawlerService {
             return null;
         }
 
-        Song song = parseSongInfo(songId, ip);
-        //Song song = new Song();
+        //Song song = parseSongInfo(songId, ip);
+        Song song = new Song();
         int commentCount = (int)JSONPath.eval(res, "$.total");
         int hotCommentCount = (int)JSONPath.eval(res, "$.hotComments.size()");
         int latestCommentCount = (int)JSONPath.eval(res, "$.comments.size()");
