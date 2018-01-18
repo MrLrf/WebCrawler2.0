@@ -58,7 +58,7 @@ public class CrawlerTest {
     public void parseSongsTest() throws IOException {
         String url = "https://music.163.com/album?id=36304576";
         //String url = "https://www.baidu.com";
-        ProxyIP ip = new ProxyIP("93.167.224.220", 80);
+        ProxyIP ip = new ProxyIP("93.167.224.220", 80, "未用");
         //System.out.println(HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort()));
         //System.out.println(HttpClientUtil.getHTML(url));
         MusicCrawlerService.parseSongs(url, ip);
@@ -75,7 +75,7 @@ public class CrawlerTest {
     @Test
     public void commentTest() throws Exception {
         String songId = "509098886";
-        ProxyIP ip = new ProxyIP("115.29.236.46", 3128);
+        ProxyIP ip = new ProxyIP("115.29.236.46", 3128, "未用");
         Song song = MusicCrawlerService.parseSongWithComment(songId, ip);
         System.out.println(song);
     }
@@ -119,7 +119,7 @@ public class CrawlerTest {
                     .data(JSSecret.getDatas(req_str))
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)
-                    .proxy("122.114.31.177", 808)
+                    .proxy("121.232.144.222", 9000)
                     .timeout(10000)
                     .execute();
             String list = response.body();

@@ -7,7 +7,7 @@ import org.bson.Document;
  * @author lirf
  * @date 2018/1/16 15:19
  */
-public class Album implements MogoDBModel{
+public class Album implements MongoDBModel {
 
     private String albumId;
     private String albumName;

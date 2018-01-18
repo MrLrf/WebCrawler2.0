@@ -10,7 +10,7 @@ import java.util.List;
  * @author lirf
  * @date 2018/1/16 15:33
  */
-public class Song implements MogoDBModel, Comparable{
+public class Song implements MongoDBModel, Comparable{
 
     private String songId;
     private String songName;

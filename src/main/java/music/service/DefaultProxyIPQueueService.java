@@ -11,15 +11,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author lirf
  * @date 2018/1/17 14:50
  */
-public class ProxyIPQueueService {
+public class DefaultProxyIPQueueService implements ProxyIpQueueService {
 
     private static Queue<ProxyIP> usableIps =  new ConcurrentLinkedQueue<>();
 
-    public static boolean addUsableIp(ProxyIP ip) {
+    @Override
+    public boolean addUsableIp(ProxyIP ip) {
         return usableIps.offer(ip);
     }
 
-    public static ProxyIP getTopUsableIp() {
+    @Override
+    public ProxyIP getTopUsableIp() {
         ProxyIP ip = usableIps.peek();
         while (!HttpClientUtil.isProxyUsable(ip.getHostName(), ip.getPort())) {
             usableIps.remove(ip);
@@ -30,11 +32,13 @@ public class ProxyIPQueueService {
         return ip1;
     }
 
-    public static boolean isUsableIpsEmpty() {
+    @Override
+    public boolean isUsableIpsEmpty() {
         return usableIps.isEmpty();
     }
 
-    public static int queueSize() {
+    @Override
+    public int queueSize() {
         return usableIps.size();
     }
 }

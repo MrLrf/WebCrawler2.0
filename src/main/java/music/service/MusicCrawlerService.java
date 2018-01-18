@@ -105,9 +105,9 @@ public class MusicCrawlerService {
      */
     public static Album parseSongs(String albumId, ProxyIP ip) throws IOException {
         String url = MusicCrawlerService.DOMAIN + "/album?id=" + albumId;
-        //String result = HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort());
-        Document doc = Jsoup.connect(url).get();
-        //Document doc = Jsoup.parse(result);
+        String result = HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort());
+        //Document doc = Jsoup.connect(url).get();
+        Document doc = Jsoup.parse(result);
 
         Album album = new Album();
         String singerId = doc.select("a.s-fc7").first().attr("href").split("=")[1];
@@ -146,7 +146,7 @@ public class MusicCrawlerService {
     /**
      * 根据歌曲id爬取歌曲信息
      */
-    public static Song parseSongInfo(String songId, ProxyIP ip) {
+    public static Song parseSongInfo(String songId, ProxyIP ip) throws IOException {
         String url = "http://music.163.com/api/song/detail/?id=" + songId+ "&ids=%5B" + songId + "%5D";
 
         JSONObject json = JSON.parseObject(HttpClientUtil.getHTMLbyProxy(url, ip.getHostName(), ip.getPort()));

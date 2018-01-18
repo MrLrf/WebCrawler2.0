@@ -1,7 +1,5 @@
 package music.main;
 
-import music.service.ProxyCrawlerService;
-
 /**
  * 主运行程序
  * @author lirf
@@ -10,8 +8,9 @@ import music.service.ProxyCrawlerService;
 public class  RunProgram {
 
     public static void main(String[] args) {
-        ProxyCrawlerService.parseProxyIp();
-        //new Thread(new NetEaseCrawler(), "netEaseCrawler").start();
+     ///   ProxyCrawlerService.parseProxyIp();
+        new Thread(new NetEaseCrawler(), "netEaseCrawler").start();
+        //new Thread(new ProxyCrawler(), "netEaseCrawler").start();
     }
 
 }

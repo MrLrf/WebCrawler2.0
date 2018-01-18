@@ -113,7 +113,7 @@ public class HttpClientUtil {
      * @param hostName
      * @param port
      */
-    public static String getHTMLbyProxy(String targetUrl, String hostName, int port) {
+    public static String getHTMLbyProxy(String targetUrl, String hostName, int port) throws IOException {
         HttpHost proxy = new HttpHost(hostName, port);
         String html = "null";
         DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
@@ -127,24 +127,21 @@ public class HttpClientUtil {
                 .setDefaultRequestConfig(requestConfig)
                 .build();
         HttpGet httpGet = new HttpGet(targetUrl);
-        try {
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-            int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode == HttpStatus.SC_OK) {
-                html = EntityUtils.toString(response.getEntity(), "gb2312");
-            }
-            response.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("----Connection timeout----");
+
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == HttpStatus.SC_OK) {
+            html = EntityUtils.toString(response.getEntity(), "gb2312");
         }
+        response.close();
+
         return html;
     }
 
     public static boolean isProxyUsable(String hostName, int port) {
         HttpClient client = new HttpClient();
         client.getHostConfiguration().setHost(hostName, port, "http");
-        HttpMethod method =new GetMethod("http://music.163.com");
+        HttpMethod method = new GetMethod("http://music.163.com");
         int statusCode;
         try {
             statusCode = client.executeMethod(method);

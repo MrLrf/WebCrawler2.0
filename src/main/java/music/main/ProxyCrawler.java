@@ -1,17 +1,19 @@
 package music.main;
 
-import music.service.ProxyCrawlerService;
-import music.service.ProxyIPQueueService;
+import music.service.*;
 
 /**
  * 功能描述
  * @author lirf
  * @date 2018/1/17 14:49
  */
-public class ProxyCrawler implements Runnable {
+public class ProxyCrawler implements Runnable{
+
+    private static ProxyIpQueueService proxyIpQueueService = new MongoDbProxyIpService();
+
     @Override
     public void run() {
-        if (ProxyIPQueueService.queueSize() < 10) {
+        if (proxyIpQueueService.queueSize() < 10) {
             fillProxyIpQueue();
         }
     }

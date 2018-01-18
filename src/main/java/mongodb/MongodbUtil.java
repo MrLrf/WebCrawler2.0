@@ -127,6 +127,27 @@ public class MongodbUtil {
         return result;
     }
 
+    public static boolean update(String collectionName, String queryField, String queryValue, String updateField, String updateValue) {
+        MongoClient mongoClient = getMongoClient();
+        MongoDatabase mongoDatabase = mongoClient.getDatabase(databaseName);
+        boolean result;
+        try {
+            MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+            BasicDBObject newDocument = new BasicDBObject();
+            newDocument.append("$set", new BasicDBObject().append(updateField,updateValue));
+
+            BasicDBObject searchQuery = new BasicDBObject().append(queryField, queryValue);
+            collection.updateOne(searchQuery, newDocument);
+            result = true;
+        } catch (Exception e) {
+            result = false;
+        } finally {
+            mongoClient.close();
+        }
+        return result;
+
+    }
+
     public static Map<String, Object> getTopDocument(String collectionName) {
         return getDocumentByLimit(collectionName, 1).get(0);
     }

@@ -24,7 +24,8 @@ public class NetEaseCrawler implements Runnable {
 			"https://music.163.com/discover/artist/cat?id=1003"};
 	private List<Document> songs = new ArrayList<>();
 	private List<Song> songList = new LinkedList<>();
-	private static ProxyIP proxyIP = ProxyIPQueueService.getTopUsableIp();
+	private static ProxyIpQueueService proxyIPQueueService = new MongoDbProxyIpService();
+	private static ProxyIP proxyIP = proxyIPQueueService.getTopUsableIp();
 	
 	@Override
 	public void run() {
@@ -76,6 +77,7 @@ public class NetEaseCrawler implements Runnable {
 			System.out.println(count);
 		} catch (Exception e) {
 			e.printStackTrace();
+			proxyIP = proxyIPQueueService.getTopUsableIp();
 		}
 	}
 	
@@ -94,15 +96,21 @@ public class NetEaseCrawler implements Runnable {
 	/**
 	 * 填充要爬取的专辑队列
 	 */
-	public void fillUnCrawledAlbumQueue(String singerId) throws IOException {
-		MusicCrawlerService.parseAlbums("https://music.163.com/artist/album?id=" + singerId, proxyIP);
+	public void fillUnCrawledAlbumQueue(String singerId) {
+		try {
+			MusicCrawlerService.parseAlbums("https://music.163.com/artist/album?id=" + singerId, proxyIP);
+		} catch (IOException e) {
+			e.printStackTrace();
+			proxyIP = proxyIPQueueService.getTopUsableIp();
+			fillUnCrawledAlbumQueue(singerId);
+		}
 	}
 
 	/**
 	 * 填充要爬取的专辑队列
 	 */
 	public void fillUnCrawledSongQueue(String albumId) throws IOException {
-		MusicCrawlerService.parseSongs(albumId, proxyIP);
+		MusicCrawlerService.parseSongs(albumId, new ProxyIP("", 1, ""));
 	}
 
 	/**
@@ -112,12 +120,12 @@ public class NetEaseCrawler implements Runnable {
 	 */
 	public Song getSongMessage(String songId) {
 		try {
-			//Song song = MusicCrawlerService.parseSongWithComment(songId, new ProxyIP("", 1));
-			Song song = MusicCrawlerService.parseSongWithComment(songId, proxyIP);
+			Song song = MusicCrawlerService.parseSongWithComment(songId, new ProxyIP("", 1, ""));
+			//Song song = MusicCrawlerService.parseSongWithComment(songId, proxyIP);
 
 			if (song == null) {
 				System.out.println("warining: be interceptted by net ease music server..");
-				Thread.sleep((long) (Math.random() * 30000));
+				Thread.sleep((long) (Math.random() * 100000));
 				
 				//递归
 				return getSongMessage(songId);
@@ -127,7 +135,7 @@ public class NetEaseCrawler implements Runnable {
 		} catch (Exception e) {
 			//e.printStackTrace();
 			System.out.println("改变代理IP重新爬取");
-			proxyIP = ProxyIPQueueService.getTopUsableIp();
+			proxyIP = proxyIPQueueService.getTopUsableIp();
 			return getSongMessage(songId);
 		}
 	}

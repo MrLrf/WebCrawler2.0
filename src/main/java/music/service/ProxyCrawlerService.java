@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
  */
 public class ProxyCrawlerService {
 
+    private static ProxyIpQueueService proxyIpQueueService = new MongoDbProxyIpService();
+
     public static void parseProxyIp() {
         String result;
         for (Map.Entry<String, String> item : Config.urlRegular.entrySet()) {
@@ -24,9 +26,9 @@ public class ProxyCrawlerService {
                 String hostName = m.group(1);
                 int port = Integer.parseInt(m.group(2));
                 if (HttpClientUtil.isProxyUsable(hostName, port)) {
-                    ProxyIP ip = new ProxyIP(hostName, port);
+                    ProxyIP ip = new ProxyIP(hostName, port, "未用");
                     System.out.println(ip);
-                    ProxyIPQueueService.addUsableIp(ip);
+                    proxyIpQueueService.addUsableIp(ip);
                 }
             }
         }
